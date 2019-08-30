@@ -1,0 +1,60 @@
+{
+    "definitions": {
+        "courseDetail": {
+            "type": "object",
+            "required": [
+                "doses"
+            ],
+            "properties": {
+                "doses": {
+                    "description": "Array of doses adminstered in course",
+                    "type": "array",
+                    "items": {
+                        "$ref": "biospiMedicineAdministrationDoseResource.json"
+                    }
+                }
+            }
+        },
+        "courseSummary": {
+            "$ref": "biospiMedicineAdministrationCourseSummaryResource.json"
+        }
+    },
+    "required": [
+        "id",
+        "medicine",
+        "eventDateTime",
+        "animal",
+        "location",
+        "treatment"
+    ],
+    "type": "object",
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/adewg/ICAR/master/Release%20Candidate%20Messages/icarEventCoreResource.json"
+        },
+        {
+            "properties": {
+                "location": {
+                    "$ref": "biospiUKHoldingIdentifierType.json"
+                },
+                "medicine": {
+                    "$ref": "biospiMedicineResource.json"
+                },
+                "reasonForTreatment": {
+                    "type": "string",
+                    "description": "Reason for administration of course of medicine"
+                },
+                "treatment": {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/courseDetail"
+                        },
+                        {
+                            "$ref": "#/definitions/courseSummary"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "required": [
+        "identifier"
+    ],
+
+    "type" :"object",
+    "description":"Standardised representation of licensed veterinary medicine",
+
+    "properties" : {
+        "identifier": {
+            "$ref": "biospiMedicineIdentifierType.json",
+            "description": "Unique medicine identification scheme and identifier combination"
+        },
+        "name": {
+            "type": "string",
+            "description": "Official medicine name." 
+          },
+        "GTIN": {
+            "$ref" : "biospiGTINType.json",
+            "description": "GTIN in GTIN-12 or GTIN-13 format" 
+        },
+        "SKU": {
+            "type": "string",
+            "description": "Stock Keeping Unit indentifier from source system" 
+          }
+    }
+}

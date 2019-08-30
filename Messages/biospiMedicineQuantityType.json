@@ -1,0 +1,18 @@
+{
+    "required": [
+        "amount",
+        "unit"
+      ],
+            
+      "type": "object",
+
+      "properties": {
+          "amount":{
+              "type": "number"
+          },
+          "unit": {
+              "type": "string",
+              "enum":["ml","l","g","mg","tube","unit"]
+          }
+      }
+}

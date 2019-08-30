@@ -1,0 +1,47 @@
+{
+    "required": [
+        "id",
+        "medicine",
+        "eventDateTime",
+        "location",
+        "supplier",
+        "quantity"
+    ],
+    "type": "object",
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/adewg/ICAR/master/Release%20Candidate%20Messages/icarEventCoreResource.json"
+        },
+        {
+            "properties": {
+                "location": {
+                    "$ref": "biospiUKHoldingIdentifierType.json"
+                },
+                "medicine": {
+                    "$ref": "biospiMedicineResource.json"
+                },
+                "quantity": {
+                    "$ref": "biospiMedicineQuantityType.json"
+                },
+                "batch": {
+                    "type": "string",
+                    "description": "Batch number of acquired medicine"
+                },
+                "expiry": {
+                    "allOf": [
+                        {
+                            "description": "Expiry date of acquired medicine"
+                        },
+                        {
+                            "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                        }
+                    ]
+                }
+            },
+            "supplier": {
+                "description": "Name and address of medicine supplier",
+                "type": "string"
+            }
+        }
+    ]
+}

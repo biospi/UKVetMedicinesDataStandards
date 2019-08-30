@@ -1,0 +1,349 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Simple API overview",
+    "version": "2.0.0"
+  },
+  "components": {
+    "schemas": {
+      "courseDetail": {
+        "type": "object",
+        "required": [
+          "doses"
+        ],
+        "properties": {
+          "doses": {
+            "description": "Array of doses adminstered in course",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/biospiMedicineAdministrationDoseResource"
+            }
+          }
+        }
+      },
+      "courseSummary": {
+        "$ref": "#/components/schemas/biospiMedicineAdministrationCourseSummaryResource"
+      },
+      "icarDateTimeType": {
+        "type": "string",
+        "description": "udt:DateTimeType | A particular point in the progression of time together with relevant supplementary information.",
+        "format": "YYYY-MM-dd hh:mm:ss"
+      },
+      "icarAnimalIdentifierType": {
+        "$ref": "#/components/schemas/icarIdentifierType",
+        "description": "Identifies an animal using a scheme and ID."
+      },
+      "icarLocationIdentifierType": {
+        "$ref": "#/components/schemas/icarIdentifierType",
+        "description": "Location identifier based on a scheme and ID."
+      },
+      "icarMetaDataResource": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "Source where data is retrieved from. URI that identified the source system"
+          },
+          "modified": {
+            "$ref": "#/components/schemas/icarDateTimeType"
+          },
+          "created": {
+            "$ref": "#/components/schemas/icarDateTimeType"
+          },
+          "creator": {
+            "type": "string",
+            "description": "Person or organisation who created the object"
+          },
+          "validFrom": {
+            "$ref": "#/components/schemas/icarDateTimeType"
+          },
+          "validTo": {
+            "$ref": "#/components/schemas/icarDateTimeType"
+          }
+        },
+        "description": "Generic meta data on this event",
+        "required": [
+          "source",
+          "modified"
+        ]
+      },
+      "icarEventCoreResource": {
+        "required": [
+          "id",
+          "animal",
+          "eventDateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier in the source system for this event."
+          },
+          "animal": {
+            "$ref": "#/components/schemas/icarAnimalIdentifierType",
+            "description": "Unique animal scheme and identifier combination."
+          },
+          "eventDateTime": {
+            "$ref": "#/components/schemas/icarDateTimeType",
+            "description": "ISO8601 date and time. MUST contain time zone. UTC recommended."
+          },
+          "location": {
+            "$ref": "#/components/schemas/icarLocationIdentifierType",
+            "description": "Unique location scheme and identifier combination."
+          },
+          "meta": {
+            "$ref": "#/components/schemas/icarMetaDataResource",
+            "description": "Optional meta-data for the event."
+          }
+        }
+      },
+      "icarIdentifierType": {
+        "required": [
+          "id",
+          "scheme"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identification for the resource issued under the auspices of the scheme."
+          },
+          "scheme": {
+            "type": "string",
+            "description": "The identifier (in reverse domain format) of an official scheme that manages unique identifiers."
+          }
+        },
+        "description": "Identifies a resource."
+      },
+      "biospiMedicineQuantityType": {
+        "required": [
+          "amount",
+          "unit"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "ml",
+              "l",
+              "g",
+              "mg",
+              "tube",
+              "unit"
+            ]
+          }
+        }
+      },
+      "biospiMedicineAdministrationCourseSummaryResource": {
+        "description": "summary course information where individual dose data is unavailable",
+        "type": "object",
+        "required": [
+          "totalQuantity",
+          "startDate",
+          "endDate",
+          "batches",
+          "operators",
+          "withdrawalDates"
+        ],
+        "properties": {
+          "totalQuantity": {
+            "description": "Total quantity of medicine administered in course",
+            "$ref": "#/components/schemas/biospiMedicineQuantityType"
+          },
+          "startDate": {
+            "description": "Date first treatment of course administered",
+            "$ref": "#/components/schemas/icarDateTimeType"
+          },
+          "endDate": {
+            "description": "Date last treatment of course administered",
+            "$ref": "#/components/schemas/icarDateTimeType"
+          },
+          "withdrawalDates": {
+            "type": "array",
+            "description": "Maximum withdrawal dates for the administered course",
+            "items": {
+              "type": "object",
+              "properties": {
+                "withdrawalDateType": {
+                  "type": "string",
+                  "description": "Type of withdrawal date (meat/milk/egg/honey)",
+                  "enum": [
+                    "meat",
+                    "milk",
+                    "egg",
+                    "honey"
+                  ]
+                },
+                "withdrawalDate": {
+                  "description": "Withdrawal date",
+                  "$ref": "#/components/schemas/icarDateTimeType"
+                }
+              }
+            }
+          },
+          "batches": {
+            "type": "array",
+            "description": "Batch number(s) of administered medicines",
+            "items": {
+              "type": "string"
+            }
+          },
+          "operators": {
+            "type": "array",
+            "description": "Person(s) who administered medicines",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "biospiMedicineAdministrationDoseResource": {
+        "type": "object",
+        "description": "Single administration of a medicine to an animal",
+        "required": [
+          "id",
+          "medicine",
+          "eventDateTime",
+          "quantity",
+          "operator",
+          "batch",
+          "withdrawalDates"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/icarEventCoreResource"
+          },
+          {
+            "properties": {
+              "medicine": {
+                "$ref": "#/components/schemas/biospiMedicineResource"
+              },
+              "quantity": {
+                "$ref": "#/components/schemas/biospiMedicineQuantityType"
+              },
+              "operator": {
+                "type": "string",
+                "description": "Person(s) who administered medicines"
+              },
+              "batch": {
+                "type": "string",
+                "description": "Batch number(s) of administered medicines"
+              },
+              "withdrawalDates": {
+                "type": "array",
+                "description": "Withdrawal dates applicable to this administered dose",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "withdrawalDateType": {
+                      "type": "string",
+                      "description": "Type of withdrawal date (meat/milk/egg/honey)",
+                      "enum": [
+                        "meat",
+                        "milk",
+                        "egg",
+                        "honey"
+                      ]
+                    },
+                    "withdrawalDate": {
+                      "description": "Withdrawal date",
+                      "$ref": "#/components/schemas/icarDateTimeType"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "biospiMedicineAdministrationCourseResource": {
+        "required": [
+          "id",
+          "medicine",
+          "eventDateTime",
+          "animal",
+          "location",
+          "treatment"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/icarEventCoreResource"
+          },
+          {
+            "properties": {
+              "medicine": {
+                "$ref": "#/components/schemas/biospiMedicineResource"
+              },
+              "reasonForTreatment": {
+                "type": "string",
+                "description": "Reason for administration of course of medicine"
+              },
+              "treatment": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/courseDetail"
+                  },
+                  {
+                    "$ref": "#/components/schemas/courseSummary"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "biospiMedicineResource": {
+        "required": [
+          "identifier"
+        ],
+        "type": "object",
+        "description": "Standardised representation of licensed veterinary medicine",
+        "properties": {
+          "identifier": {
+            "$ref": "#/components/schemas/biospiMedicineIdentifierType",
+            "description": "Unique medicine identification scheme and identifier combination"
+          },
+          "name": {
+            "type": "string",
+            "description": "Official medicine name."
+          },
+          "GTIN": {
+            "$ref": "#/components/schemas/biospiGTINType",
+            "description": "GTIN in GTIN-12 or GTIN-13 format"
+          },
+          "SKU": {
+            "type": "string",
+            "description": "Stock Keeping Unit indentifier from source system"
+          }
+        }
+      },
+      "biospiMedicineIdentifierType": {
+        "$ref": "#/components/schemas/icarIdentifierType",
+        "description": "Identifies a medicine using a scheme ('VMD') and ID (VmNo)."
+      },
+      "biospiGTINType": {
+        "type": "object",
+        "description": "Global Trade Identification Number in 12-digit or 13-digit format",
+        "properties": {
+          "gtin-12": {
+            "type": "string",
+            "maxLength": 12,
+            "minLength": 12,
+            "pattern": "\\d{12}"
+          },
+          "gtin-13": {
+            "type": "string",
+            "maxLength": 13,
+            "minLength": 13,
+            "pattern": "\\d{13}"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+    "allOf": [
+        {
+            "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+        },
+        {
+            "description": "Identifies a medicine using a VMD scheme and ID (VmNo).",
+            "properties":{
+                "scheme":{
+                    "type":"string",
+                    "enum": ["uk.gov.vmd"]
+                }
+            }
+        }
+    ]
+}

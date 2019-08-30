@@ -1,0 +1,82 @@
+{
+    "type": "object",
+    "description": "Single administration of a medicine to an animal",
+    "required": [
+        "id",
+        "eventDateTime",
+        "quantity",
+        "operator",
+        "batch",
+        "expiry",
+        "withdrawalDates"
+    ],
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/adewg/ICAR/master/Release%20Candidate%20Messages/icarEventCoreResource.json"
+        },
+        {
+            "properties": {
+                "location": {
+                    "$ref": "biospiUKHoldingIdentifierType.json"
+                },
+                "quantity": {
+                    "$ref": "biospiMedicineQuantityType.json"
+                },
+                "operator": {
+                    "type": "string",
+                    "description": "Person who administered medicines"
+                },
+                "batchesAndExpiryDates": {
+                    "type": "array",
+                    "items": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "batch": {
+                                    "type": "string",
+                                    "description": "Batch number of administered medicines"
+                                },
+                                "expiry": {
+                                    "allOf": [
+                                        {
+                                            "description": "Expiry date of acquired medicine"
+                                        },
+                                        {
+                                            "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "withdrawalDates": {
+                    "type": "array",
+                    "description": "Withdrawal dates applicable to this administered dose",
+                    "items": [
+                        {
+                            "type":"object",
+                            "properties":{
+                                "withdrawalType":{
+                                    "type": "string",
+                                    "description": "Type of withdrawal date (meat/milk/egg/honey)",
+                                    "enum": [
+                                        "meat",
+                                        "milk",
+                                        "egg",
+                                        "honey"
+                                    ]
+                                },
+                                "withdrawalDate":{
+                                    "description": "Withdrawal date",
+                                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                                }
+                            }
+                        }
+                        
+                    ]
+                }
+            }
+        }
+    ]
+}

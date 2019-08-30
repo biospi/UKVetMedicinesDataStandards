@@ -1,0 +1,134 @@
+{
+    "definitions": {
+        "CPH": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CPH Number",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.apha.cph"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{2}/\\d{3}/\\d{4}"
+                        }
+                    }
+
+                }
+            ]
+        },
+        "CPHH": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CPHH Number",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.apha.cphh"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{2}/\\d{3}/\\d{4}/\\d{2}"
+                        }
+                    }
+                }
+            ]
+        },
+        "CTSID": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CTSID",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.bcms.ctsid"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "CattleHerdMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Cattle Herd Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.apha.herd.cattle"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "FlockMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Flock Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.apha.herd.cattle"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "PigHerdMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Pig Herd Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "pattern":"uk.apha.herd.pig"
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"[a-zA-Z]{1,2}\\d{4}"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+
+    "anyOf":[
+        {"ref": "#/definitions/CPH"},
+        {"ref": "#/definitions/CPHH"},
+        {"ref": "#/definitions/CTSID"},
+        {"ref": "#/definitions/CattleHerdMark"},
+        {"ref": "#/definitions/FlockMark"},
+        {"ref": "#/definitions/PigHerdMark"}
+    ]
+}
