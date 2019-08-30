@@ -1,0 +1,134 @@
+{
+    "definitions": {
+        "ukLocationSchemeCPH": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CPH Number",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.apha.cph"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{2}/\\d{3}/\\d{4}"
+                        }
+                    }
+
+                }
+            ]
+        },
+        "ukLocationSchemeCPHH": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CPHH Number",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.apha.cphh"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{2}/\\d{3}/\\d{4}/\\d{2}"
+                        }
+                    }
+                }
+            ]
+        },
+        "ukLocationSchemeCTSID": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "CTSID",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.bcms.ctsid"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "ukLocationSchemeCattleHerdMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Cattle Herd Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.apha.herd.cattle"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "ukLocationSchemeFlockMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Flock Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.apha.herd.flock"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"\\d{6}"
+                        }
+                    }
+                }
+            ]
+        },
+        "ukLocationSchemePigHerdMark": {
+            "allOf": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarIdentifierType.json"
+                },
+                {
+                    "description": "APHA Pig Herd Mark",
+                    "properties": {
+                        "scheme":{
+                            "type":"string",
+                            "enum":["uk.apha.herd.pig"]
+                        },
+                        "id":{
+                            "type":"string",
+                            "pattern":"[a-zA-Z]{1,2}\\d{4}"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+
+    "anyOf":[
+        {"$ref": "#/definitions/ukLocationSchemeCPH"},
+        {"$ref": "#/definitions/ukLocationSchemeCPHH"},
+        {"$ref": "#/definitions/ukLocationSchemeCTSID"},
+        {"$ref": "#/definitions/ukLocationSchemeCattleHerdMark"},
+        {"$ref": "#/definitions/ukLocationSchemeFlockMark"},
+        {"$ref": "#/definitions/ukLocationSchemePigHerdMark"}
+    ]
+}

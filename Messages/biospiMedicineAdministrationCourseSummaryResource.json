@@ -1,0 +1,92 @@
+{
+    "description": "summary course information where individual dose data is unavailable",
+    "type": "object",
+    "required": [
+        "totalQuantity",
+        "startDate",
+        "endDate",
+        "batches",
+        "operators",
+        "withdrawalDates"
+    ],
+    "properties": {
+        "totalQuantity": {
+            "allOf": [
+                {
+                    "description": "Total quantity of medicine administered in course"
+                },
+                {
+                    "$ref": "biospiMedicineQuantityType.json"
+                }
+            ]
+        },
+        "startDate": {
+            "allOf": [
+                {
+                    "description": "Date first treatment of course administered"
+                },
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                }
+            ]
+        },
+        "endDate": {
+            "allOf": [
+                {
+                    "description": "Date last treatment of course administered"
+                },
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                }
+            ]
+        },
+        "withdrawalDates": {
+            "type": "array",
+            "description": "Withdrawal dates applicable to this administered dose",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "withdrawalType": {
+                            "type": "string",
+                            "description": "Type of withdrawal date (meat/milk/egg/honey)",
+                            "enum": [
+                                "meat",
+                                "milk",
+                                "egg",
+                                "honey"
+                            ]
+                        },
+                        "withdrawalDate": {
+                            "description": "Withdrawal date",
+                            "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                        }
+                    }
+                }
+            ]
+        },
+        "batches": {
+            "type": "array",
+            "description": "Batch number(s) of administered medicines",
+            "items": {
+                "type": "string"
+            }
+        },
+        "expiry": {
+            "description": "Expiry date(s) of medicine used in dose",
+            "type": "array",
+            "items": [
+                {
+                    "$ref": "https://github.com/adewg/ICAR/raw/master/Release%20Candidate%20Messages/icarDateTimeType.json"
+                }
+            ]
+        },
+        "operators": {
+            "type": "array",
+            "description": "Person(s) who administered medicines",
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

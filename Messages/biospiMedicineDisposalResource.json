@@ -1,0 +1,34 @@
+{       
+    "required": [
+      "id",
+      "medicine",
+      "eventDateTime",
+      "location",
+      "method",
+      "quantity"
+    ],
+          
+    "type": "object",
+          
+    "allOf": [
+        {
+            "$ref": "https://raw.githubusercontent.com/adewg/ICAR/master/Release%20Candidate%20Messages/icarEventCoreResource.json"
+        },
+        {
+            "properties": {
+                "location": {
+                    "$ref": "biospiUKHoldingIdentifierType.json"
+                },
+                "medicine": {
+                    "$ref":"biospiMedicineResource.json"
+                },
+                "quantity":{
+                    "$ref":"biospiMedicineQuantityType.json"
+                },
+                "method": {
+                    "type":"string"
+                }
+            }
+        }
+    ]
+}
