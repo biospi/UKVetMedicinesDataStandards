@@ -1,0 +1,596 @@
+openapi: "3.0.0"
+
+info: 
+  title: JSON import test number 1
+  version: 0.0.1
+  
+paths:
+  /auth:
+    post:
+      summary: Get Authentiation Token
+      operationId: auth
+      tags:
+        - Authenticate
+      requestBody:
+        required: true
+        description: A JSON object containing the auth id and auth key
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/AuthToken'
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: JSESSIONID=abcde12345; Path=/; HttpOnly
+        '400':
+          description: Bad request. 
+        '401':
+          description: Authorization information is missing or invalid.
+        '404':
+          description: An account with the specified ID was not found.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /administer:
+    post:
+      summary: Submit animinstered course
+      operationId: submitCourse
+      tags:
+       - Submit administered course
+      security:
+        - cookieAuth: []
+      requestBody:
+        description: biospiMedicineAdministrationCourseResource JSON object
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/biospiMedicineAdministrationCourseResource'
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '/components/schemas/Error'
+                
+  /acquire:
+    post:
+      summary: Submit record of acquired medicine
+      operationId: submitAquisition
+      tags:
+       - Submit acquired medicine
+      security:
+        - cookieAuth: []
+      requestBody:
+        description: biospiMedicineAquisitionResource JSON object
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/biospiMedicineAquisitionResource'
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+  /dispose:
+    post:
+      summary: Submit record of disposed medicine
+      operationId: submitDisposal
+      tags:
+       - Submit disposed medicine
+      security:
+        - cookieAuth: []
+      requestBody:
+        description: biospiMedicineDisposalResource JSON object
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/biospiMedicineDisposalResource'
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    
+components:
+  securitySchemes:
+    cookieAuth:         # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
+  schemas:
+    AuthRequest:
+      type: object
+      properties:
+        auth-id:
+          type: string
+          description: Identifier of the authenticating account
+        auth-key:
+          type: string
+          description: Access key for account
+    AuthToken:
+      type: object
+      properties:
+        tokenData: 
+          type: string
+          description: data contents of authentication token
+        expiry:
+          type: string
+          
+    Error:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/exampleErrorResource'
+    exampleErrorResource:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for this particular occurrence of the problem
+        status:
+          type: integer
+          description: 'The HTTP status code applicable to this problem, expressed as a string value'
+          format: int32
+        code:
+          type: string
+          description: 'An application-specific error code, expressed as a string value.'
+        title:
+          type: string
+          description: 'A short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.'
+        detail:
+          type: string
+          description: 'A human-readable explanation specific to this occurrence of the problem. Like title, this field’s value can be localized.'
+        meta:
+          type: object
+          properties: {}
+      description: A human-readable error message describing what went wrong.
+    
+    courseDetail:
+          type: object
+          required:
+            - doses
+          properties:
+            doses:
+              description: Array of doses adminstered in course
+              type: array
+              items:
+                $ref: '#/components/schemas/biospiMedicineAdministrationDoseResource'
+                
+    courseSummary:
+      $ref: '#/components/schemas/biospiMedicineAdministrationCourseSummaryResource'
+      
+    icarDateTimeType:
+      type: string
+      description: 'udt:DateTimeType | A particular point in the progression of time together with relevant supplementary information.'
+      format: 'date-time'
+      
+    icarAnimalIdentifierType:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: Identifies an animal using a scheme and ID.
+      
+    icarLocationIdentifierType:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: Location identifier based on a scheme and ID.
+      
+    icarMetaDataResource:
+      type: object
+      properties:
+        source:
+          type: string
+          description: Source where data is retrieved from. URI that identified the source system
+        modified:
+          $ref: '#/components/schemas/icarDateTimeType'
+        created:
+          $ref: '#/components/schemas/icarDateTimeType'
+        creator:
+          type: string
+          description: Person or organisation who created the object
+        validFrom:
+          $ref: '#/components/schemas/icarDateTimeType'
+        validTo:
+          $ref: '#/components/schemas/icarDateTimeType'
+      description: Generic meta data on this event
+      required:
+        - source
+        - modified
+        
+    icarEventCoreResource:
+      required:
+        - id
+        - animal
+        - eventDateTime
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier in the source system for this event.
+        animal:
+          allOf:
+            - $ref: '#/components/schemas/icarAnimalIdentifierType'
+            - description: Unique animal scheme and identifier combination.
+        eventDateTime:
+          allOf:
+            - $ref: '#/components/schemas/icarDateTimeType'
+            - description: ISO8601 date and time. MUST contain time zone. UTC recommended.
+        location:
+          allOf:
+            - $ref: '#/components/schemas/icarLocationIdentifierType'
+            - description: Unique location scheme and identifier combination.
+        meta:
+          allOf:
+            - $ref: '#/components/schemas/icarMetaDataResource'
+            - description: Optional meta-data for the event.
+          
+    icarIdentifierType:
+      required:
+        - id
+        - scheme
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identification for the resource issued under the auspices of the scheme.
+        scheme:
+          type: string
+          description: The identifier (in reverse domain format) of an official scheme that manages unique identifiers.
+      description: Identifies a resource.
+      
+    ukLocationSchemeCPH:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: CPH Number
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.apha.cph
+            id:
+              type: string
+              pattern: '\d{2}/\d{3}/\d{4}'
+    ukLocationSchemeCPHH:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: CPHH Number
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.apha.cphh
+            id:
+              type: string
+              pattern: '\d{2}/\d{3}/\d{4}/\d{2}'
+    ukLocationSchemeCTSID:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: CTSID
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.bcms.ctsid
+            id:
+              type: string
+              pattern: '\d{6}'
+    ukLocationSchemeCattleHerdMark:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: APHA Cattle Herd Mark
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.apha.herd.cattle
+            id:
+              type: string
+              pattern: '\d{6}'
+    ukLocationSchemeFlockMark:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: APHA Flock Mark
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.apha.herd.cattle
+            id:
+              type: string
+              pattern: '\d{6}'
+    ukLocationSchemePigHerdMark:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: APHA Pig Herd Mark
+          properties:
+            scheme:
+              type: string
+              enum: 
+                - uk.apha.herd.pig
+            id:
+              type: string
+              pattern: '[a-zA-Z]{1,2}\d{4}'
+
+    biospiUKHoldingIdentifierType:
+      anyOf:
+        - $ref: '#/components/schemas/ukLocationSchemeCPH'
+        - $ref: '#/components/schemas/ukLocationSchemeCPHH'
+        - $ref: '#/components/schemas/ukLocationSchemeCTSID'
+        - $ref: '#/components/schemas/ukLocationSchemeCattleHerdMark'
+        - $ref: '#/components/schemas/ukLocationSchemeFlockMark'
+        - $ref: '#/components/schemas/ukLocationSchemePigHerdMark'
+    
+    biospiMedicineQuantityType:
+      required:
+        - amount
+        - unit
+      type: object
+      properties:
+        amount:
+          type: number
+        unit:
+          type: string
+          enum:
+            - ml
+            - l
+            - g
+            - mg
+            - tube
+            - unit
+    
+    biospiMedicineDisposalResource:
+     required:
+       - id
+       - medicine
+       - eventDateTime
+       - location
+       - method
+       - quantity
+     type: object
+     allOf:
+       - $ref:  '#/components/schemas/icarEventCoreResource'
+       - properties:
+           location:
+             $ref: '#/components/schemas/biospiUKHoldingIdentifierType'
+           medicine:
+             $ref: '#/components/schemas/biospiMedicineResource'
+           quantity:
+             $ref: '#/components/schemas/biospiMedicineQuantityType'
+           method:
+             type: string
+     
+    biospiMedicineAquisitionResource:
+      required:
+        - id
+        - medicine
+        - eventDateTime
+        - batch
+        - expiry
+        - location
+        - supplier
+        - quantity
+      type: object
+      allOf:
+        - $ref:  '#/components/schemas/icarEventCoreResource'
+        - properties:
+            location:
+              $ref: '#/components/schemas/biospiUKHoldingIdentifierType'
+            medicine:
+              $ref: '#/components/schemas/biospiMedicineResource'
+            quantity:
+              $ref: '#/components/schemas/biospiMedicineQuantityType'
+            batch:
+              type: string
+              description: Batch number of acquired medicine
+            expiry:
+              allOf:
+                - description: Expiry date of acquired medicine
+                - $ref: '#/components/schemas/icarDateTimeType' 
+            supplier:
+              description: Name and address of medicine supplier
+              type: string
+
+            
+    biospiMedicineAdministrationCourseSummaryResource:
+      description: summary course information where individual dose data is unavailable
+      type: object
+      required:
+        - totalQuantity
+        - startDate
+        - endDate
+        - batches
+        - operators
+        - withdrawalDates
+      properties:
+        totalQuantity:
+          allOf:
+            - description: Total quantity of medicine administered in course
+            - $ref: '#/components/schemas/biospiMedicineQuantityType'
+        startDate:
+          allOf:
+            - description: Date first treatment of course administered
+            - $ref:  '#/components/schemas/icarDateTimeType'
+        endDate:
+          allOf:
+            - description: Date last treatment of course administered
+            - $ref:  '#/components/schemas/icarDateTimeType'
+        withdrawalDates:
+          type: array
+          description: Withdrawal dates applicable to this administered dose
+          items:
+            type: object
+            properties:
+              withdrawalType:
+                type: string
+                description: Type of withdrawal date (meat/milk/egg/honey)
+                enum:
+                  - meat
+                  - milk
+                  - egg
+                  - honey
+              withdrawalDate:
+                allOf:
+                  - description: Withdrawal date
+                  - $ref:  '#/components/schemas/icarDateTimeType'
+        batches:
+          type: array
+          description: Batch number(s) of administered medicines
+          items:
+            type: string
+        expiry:
+          description: Expiry date(s) of medicine used in dose
+          type: array
+          items:
+            $ref: '#/components/schemas/icarDateTimeType'
+        operators:
+          type: array
+          description: Person(s) who administered medicines
+          items:
+            type: string
+            
+    biospiMedicineAdministrationDoseResource:
+      type: object
+      description: Single administration of a medicine to an animal
+      required:
+        - id
+        - eventDateTime
+        - quantity
+        - operator
+        - batchesAndExpiryDates
+        - withdrawalDates
+      allOf:
+        - $ref: '#/components/schemas/icarEventCoreResource'
+        - properties:
+            location:
+              $ref: '#/components/schemas/biospiUKHoldingIdentifierType'
+            quantity:
+              $ref: '#/components/schemas/biospiMedicineQuantityType'
+            operator:
+              type: string
+              description: Person who administered medicines
+            batchesAndExpiryDates:
+              type: array
+              items:
+                type: object
+                properties:
+                  batch:
+                    type: string
+                    description: Batch number of administered medicines
+                  expiry:
+                    allOf:
+                      - description: Expiry date of acquired medicine
+                      - $ref: '#/components/schemas/icarDateTimeType'
+            withdrawalDates:
+              type: array
+              description: Withdrawal dates applicable to this administered dose
+              items:
+                type: object
+                properties:
+                  withdrawalType:
+                    type: string
+                    description: Type of withdrawal date (meat/milk/egg/honey)
+                    enum:
+                      - meat
+                      - milk
+                      - egg
+                      - honey
+                  withdrawalDate:
+                    allOf:
+                      - description: Withdrawal date
+                      - $ref: '#/components/schemas/icarDateTimeType'
+                    
+    biospiMedicineAdministrationCourseResource:
+      required:
+        - id
+        - medicine
+        - eventDateTime
+        - animal
+        - location
+        - treatment
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/icarEventCoreResource'
+        - properties:
+            location:
+              $ref: '#/components/schemas/biospiUKHoldingIdentifierType'
+            medicine:
+              $ref: '#/components/schemas/biospiMedicineResource'
+            reasonForTreatment:
+              type: string
+              description: Reason for administration of course of medicine
+            treatment:
+              oneOf:
+                - $ref: '#/components/schemas/courseDetail'
+                - $ref: '#/components/schemas/courseSummary'
+                
+    biospiMedicineResource:
+      required:
+        - identifier
+      type: object
+      description: Standardised representation of licensed veterinary medicine
+      properties:
+        identifier:
+          allOf:
+            - $ref: '#/components/schemas/biospiMedicineIdentifierType'
+            - description: Unique medicine identification scheme and identifier combination
+        name:
+          allOf:
+            - type: string
+            - description: Official medicine name.
+        GTIN:
+          allOf:
+            - $ref: '#/components/schemas/biospiGTINType'
+            - description: GTIN in GTIN-12 or GTIN-13 format
+        SKU:
+          type: string
+          description: Stock Keeping Unit indentifier from source system
+
+    biospiMedicineIdentifierType:
+      allOf:
+        - $ref: '#/components/schemas/icarIdentifierType'
+        - description: Identifies a medicine using a VMD scheme and ID (VmNo).
+          properties:
+            scheme:
+              type: string
+              enum:
+                - uk.gov.vmd
+  
+    biospiGTINType:
+      type: object
+      description: Global Trade Identification Number in 12-digit or 13-digit format
+      properties:
+        gtin-12:
+          type: string
+          maxLength: 12
+          minLength: 12
+          pattern: '\d{12}'
+        gtin-13:
+          type: string
+          maxLength: 13
+          minLength: 13
+          pattern: '\d{13}'
