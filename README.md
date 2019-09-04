@@ -1,4 +1,4 @@
-# UKVetMedicinesDataStandards
+# UK Vet Medicines Data Standards
 Building open data standards for UK veterinary medicines data exchange based up [ICAR Animal Data Exchange standards](https://github.com/adewg/ICAR, an initiative led by the [BioSP👁] (http://www.biospi.org) Data Science Laboratory for One Health Epidemiology, Sensing and Omics at the University of Bristol.
 
 We aim to develop concise, yet comprehensive standards for the interchange of records regarding the usage of veterinary medicines in livestock in the UK. If you are a researcher, developer, farmer, vet or any other interested party we welcome feedback on these efforts and any contributions.
@@ -18,7 +18,7 @@ This repository contains publicly-available releases of the specification
 
 [![Rezare Systems](https://www.rezare.co.nz/wp-content/uploads/2016/03/RezareLogo_200w.png)](https://www.rezare.co.nz/)
 
-[![Agriculture and Horticulture Development Board](https://media.ahdb.org.uk/media/Default/Layout/ADHB.png)](https://ahdb.org.uk/)
+[![Agriculture and Horticulture Development Board](https://media.ahdb.org.uk/media/Default/Layout/ADHB.png)](http://beefandlamb.ahdb.org.uk/research/animal-health-and-welfare-beef/cattle-emb-phase-ii/)
 
 [![Icon Software](https://static.wixstatic.com/media/283e5d_31415b50e1aa4409928ca78c1deb5f1d~mv2.png/v1/fill/w_100,h_50,al_c,q_80,usm_0.66_1.00_0.01/logo-rgb.webp)](https://www.icon.software/)
 
