@@ -16,7 +16,7 @@ This repository contains publicly-available releases of the specification
 ## Collaborators
 [![Bristol Veterinary School](http://www.bristol.ac.uk/media-library/protected/images/uob-logo-full-colour-largest-2.png)](http://www.bristol.ac.uk/vetscience/)
 
-[![Rezare Systems](https://www.rezare.co.nz/wp-content/uploads/2016/03/RezareLogo_200w.png)](https://www.rezare.co.nz/)
+[![Rezare Systems](https://www.rezare.co.nz/wp-content/uploads/2018/10/RezareLogo.png)](https://www.rezare.co.nz/)
 
 [![Agriculture and Horticulture Development Board](https://media.ahdb.org.uk/media/Default/Layout/ADHB.png)](http://beefandlamb.ahdb.org.uk/research/animal-health-and-welfare-beef/cattle-emb-phase-ii/)
 
