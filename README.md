@@ -1,4 +1,4 @@
-# UK Vet Medicines Data Standards
+# UK Veterinary Medicines Data Standards
 Building open data standards for UK veterinary medicines data exchange based up [ICAR Animal Data Exchange standards](https://github.com/adewg/ICAR), an initiative led by the [BioSP👁](http://www.biospi.org) Data Science Laboratory for One Health Epidemiology, Sensing and Omics at the University of Bristol.
 
 We aim to develop concise, yet comprehensive standards for the interchange of records regarding the usage of veterinary medicines in livestock in the UK. If you are a researcher, developer, farmer, vet or any other interested party we welcome feedback on these efforts and any contributions.
